@@ -1,0 +1,134 @@
+[gd_scene load_steps=9 format=3 uid="uid://b752gc8ibsgdn"]
+
+[ext_resource type="Script" path="res://scenes/constant_shield.gd" id="1_t7v7i"]
+[ext_resource type="Texture2D" uid="uid://v2j7x36xommy" path="res://scenes/air_shield.svg" id="2_e1wqf"]
+[ext_resource type="Texture2D" uid="uid://bjyrvob74j4wf" path="res://scenes/constant_shield.svg" id="2_xdvjr"]
+[ext_resource type="Texture2D" uid="uid://baabkd3pxsmfl" path="res://scenes/crystal_shield.svg" id="3_dnj64"]
+[ext_resource type="Texture2D" uid="uid://py3ntxryq6tg" path="res://scenes/water_shield.svg" id="3_hi81f"]
+[ext_resource type="Texture2D" uid="uid://ddjix0s8s4jn1" path="res://scenes/fire_projection.svg" id="4_pvor8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0c4xp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_e1wqf")
+}],
+"loop": true,
+"name": &"air",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_dnj64")
+}],
+"loop": true,
+"name": &"crystal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xdvjr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_pvor8")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_hi81f")
+}],
+"loop": true,
+"name": &"water",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bcmj0"]
+radius = 50.0
+
+[node name="Shield" type="Area2D"]
+collision_layer = 2
+collision_mask = 8
+script = ExtResource("1_t7v7i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_0c4xp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bcmj0")
+
+[node name="BulletTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="FireSourceRing" type="Node2D" parent="."]
+
+[node name="Source" type="Node2D" parent="FireSourceRing"]
+position = Vector2(50, 0)
+
+[node name="Source2" type="Node2D" parent="FireSourceRing"]
+position = Vector2(48, -13)
+
+[node name="Source3" type="Node2D" parent="FireSourceRing"]
+position = Vector2(48, 13)
+
+[node name="Source4" type="Node2D" parent="FireSourceRing"]
+position = Vector2(-50, 0)
+
+[node name="Source5" type="Node2D" parent="FireSourceRing"]
+position = Vector2(-48, -13)
+
+[node name="Source6" type="Node2D" parent="FireSourceRing"]
+position = Vector2(-48, 13)
+
+[node name="ShieldButtonHoldTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="D" type="RayCast2D" parent="."]
+position = Vector2(0, 5)
+collision_mask = 8
+
+[node name="DL" type="RayCast2D" parent="."]
+position = Vector2(-35, 35)
+target_position = Vector2(-8, 8)
+collision_mask = 8
+
+[node name="L" type="RayCast2D" parent="."]
+position = Vector2(-5, 0)
+target_position = Vector2(-50, 0)
+collision_mask = 8
+
+[node name="UL" type="RayCast2D" parent="."]
+position = Vector2(-35, -35)
+target_position = Vector2(-8, -8)
+collision_mask = 8
+
+[node name="U" type="RayCast2D" parent="."]
+position = Vector2(0, -50)
+target_position = Vector2(0, -5)
+collision_mask = 8
+
+[node name="UR" type="RayCast2D" parent="."]
+position = Vector2(35, -35)
+target_position = Vector2(8, -8)
+collision_mask = 8
+
+[node name="R" type="RayCast2D" parent="."]
+position = Vector2(50, 0)
+target_position = Vector2(5, 0)
+collision_mask = 8
+
+[node name="DR" type="RayCast2D" parent="."]
+position = Vector2(35, 35)
+target_position = Vector2(8, 8)
+collision_mask = 8
+
+[connection signal="timeout" from="ShieldButtonHoldTimer" to="." method="_on_shield_button_hold_timer_timeout"]

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://3jkmdrdf6dbd"]
+
+[ext_resource type="Script" path="res://scripts/orb_thrown.gd" id="1_160dp"]
+[ext_resource type="Texture2D" uid="uid://5fkwsnp0karx" path="res://scenes/orb_thrown.svg" id="2_ioxb2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_swntw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ioxb2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c0fck"]
+
+[node name="OrbThrown" type="Area2D"]
+collision_layer = 2
+collision_mask = 8
+script = ExtResource("1_160dp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_swntw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_c0fck")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="LeftScreenTimer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="timeout" from="LeftScreenTimer" to="." method="_on_left_screen_timer_timeout"]

@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://ct2q2bsg1oiss"]
+
+[ext_resource type="Script" path="res://scripts/bullet_fire_expanding.gd" id="1_scfla"]
+[ext_resource type="Texture2D" uid="uid://d1f022ci3w2ud" path="res://scenes/bullet_non_elem.svg" id="2_qfp6c"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_al8uo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_qfp6c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nlhbv"]
+radius = 7.07107
+
+[node name="BulletFireExp" type="Area2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_scfla")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_al8uo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_nlhbv")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-5, -5, 10, 10)
+
+[node name="LeftScreenTimer" type="Timer" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered" flags=18]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited" flags=18]
+[connection signal="timeout" from="LeftScreenTimer" to="." method="_on_left_screen_timer_timeout" flags=18]

@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://dwhq7g8nkocrb"]
+
+[ext_resource type="Script" path="res://scenes/brief_shield.gd" id="1_1c2mt"]
+[ext_resource type="Texture2D" uid="uid://bgnl85mg4brcf" path="res://scenes/brief_shield.svg" id="1_n7s8c"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1stl3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_n7s8c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y1ojj"]
+radius = 50.0899
+
+[node name="BriefShield" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_1c2mt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1stl3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_y1ojj")
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]

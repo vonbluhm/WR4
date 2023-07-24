@@ -1,0 +1,146 @@
+[gd_scene load_steps=12 format=3 uid="uid://cuk7ysqkfqudt"]
+
+[ext_resource type="Script" path="res://scripts/character.gd" id="1_oifd3"]
+[ext_resource type="Script" path="res://scripts/FSM.gd" id="2_7fp56"]
+[ext_resource type="Texture2D" uid="uid://bob3ibl3ih120" path="res://Player Blue/playerBlue_stand.png" id="3_4ju5o"]
+[ext_resource type="Texture2D" uid="uid://duioalrfbo2d4" path="res://Player Blue/playerBlue_walk1.png" id="4_ce24n"]
+[ext_resource type="Texture2D" uid="uid://c8arg8k667jmk" path="res://Player Blue/playerBlue_walk2.png" id="5_a3mm8"]
+[ext_resource type="Texture2D" uid="uid://6hmqj6hf4daw" path="res://Player Blue/playerBlue_walk3.png" id="6_h66wj"]
+[ext_resource type="Texture2D" uid="uid://de71s3vxkrfrk" path="res://Player Blue/playerBlue_walk4.png" id="7_hnptg"]
+[ext_resource type="Texture2D" uid="uid://n5mddxs0vpyp" path="res://Player Blue/playerBlue_walk5.png" id="8_250qq"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_j8bpo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_4ju5o")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ce24n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_a3mm8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_h66wj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_hnptg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_250qq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_hnptg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_h66wj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_a3mm8")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cui7r"]
+height = 54.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_47krb"]
+radius = 50.0
+
+[node name="Character" type="CharacterBody2D"]
+collision_mask = 24
+script = ExtResource("1_oifd3")
+
+[node name="FSM" type="Node2D" parent="."]
+script = ExtResource("2_7fp56")
+elem_pwr = 3
+constant_shield_unlocked = true
+water_ability_level = 2
+air_ability_level = 2
+crystal_ability_level = 2
+fire_ability_level = 1
+air_attack_level = 2
+crystal_attack_level = 1
+fire_attack_level = 2
+
+[node name="CoyoteTimer" type="Timer" parent="FSM"]
+wait_time = 0.2
+one_shot = true
+
+[node name="BounceTimer" type="Timer" parent="FSM"]
+wait_time = 0.2
+one_shot = true
+
+[node name="DashTimer" type="Timer" parent="FSM"]
+wait_time = 0.5
+one_shot = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_j8bpo")
+animation = &"idle"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_cui7r")
+
+[node name="ShieldCS" type="CollisionShape2D" parent="."]
+position = Vector2(0, -22)
+shape = SubResource("CircleShape2D_47krb")
+disabled = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Control" type="Control" parent="Camera2D"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Camera2D/Control"]
+layout_mode = 0
+offset_left = -78.0
+offset_top = -88.0
+offset_right = -11.0
+offset_bottom = -37.0
+
+[node name="Label2" type="Label" parent="Camera2D/Control"]
+layout_mode = 0
+offset_left = -30.0
+offset_top = -89.0
+offset_right = 37.0
+offset_bottom = -38.0
+
+[node name="Label3" type="Label" parent="Camera2D/Control"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = -85.0
+offset_right = 92.0
+offset_bottom = -34.0
+
+[node name="Label4" type="Label" parent="Camera2D/Control"]
+offset_left = 56.0
+offset_top = -14.0
+offset_right = 86.0
+offset_bottom = 22.0
+
+[node name="JumpHoldTimer" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[node name="FireSourceRing" type="Node2D" parent="."]
+
+[node name="Source" type="Node2D" parent="FireSourceRing"]
+position = Vector2(20, 0)
+
+[connection signal="timeout" from="FSM/CoyoteTimer" to="FSM" method="_on_coyote_timer_timeout"]
+[connection signal="timeout" from="FSM/BounceTimer" to="FSM" method="_on_bounce_timer_timeout"]
+[connection signal="timeout" from="FSM/DashTimer" to="FSM" method="_on_dash_timer_timeout"]

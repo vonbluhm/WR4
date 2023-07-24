@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://byc330d620h7i"]
+
+[ext_resource type="Script" path="res://scripts/water_body.gd" id="1_m4pk6"]
+[ext_resource type="Shader" path="res://scenes/stage.gdshader" id="2_p5o0o"]
+[ext_resource type="Script" path="res://scripts/smooth_path.gd" id="3_48785"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nqsp0"]
+shader = ExtResource("2_p5o0o")
+shader_parameter/tint = Vector4(0, 209, 230, 0)
+
+[sub_resource type="Curve2D" id="Curve2D_q41xq"]
+
+[node name="WaterBody" type="Node2D"]
+script = ExtResource("1_m4pk6")
+
+[node name="WaterPolygon" type="Polygon2D" parent="."]
+material = SubResource("ShaderMaterial_nqsp0")
+color = Color(0.156863, 0.670588, 0.858824, 0.337255)
+
+[node name="WaterBorder" type="Path2D" parent="."]
+curve = SubResource("Curve2D_q41xq")
+script = ExtResource("3_48785")
+_smooth = true
+
+[node name="WaterBodyArea" type="Area2D" parent="." groups=["water_bodies"]]
+collision_layer = 16
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterBodyArea"]
+
+[connection signal="body_entered" from="WaterBodyArea" to="." method="_on_water_body_area_body_entered"]
+[connection signal="body_exited" from="WaterBodyArea" to="." method="_on_water_body_area_body_exited"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1hqq1exdx7yy"]
+
+[ext_resource type="Script" path="res://scripts/beam.gd" id="1_g781i"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pxuei"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 98, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+
+[node name="Beam" type="Node2D"]
+script = ExtResource("1_g781i")
+
+[node name="Segment" type="RayCast2D" parent="."]
+top_level = true
+target_position = Vector2(18, 0)
+collision_mask = 8
+
+[node name="Line2D" type="Line2D" parent="."]
+default_color = Color(0.34902, 1, 1, 1)
+joint_mode = 2
+end_cap_mode = 2
+
+[node name="ContactPoint" type="GPUParticles2D" parent="."]
+process_material = SubResource("ParticleProcessMaterial_pxuei")
